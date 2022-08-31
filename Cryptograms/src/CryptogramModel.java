@@ -18,31 +18,43 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Observable;
 import java.util.Scanner;
 
-public class CryptogramModel extends Observable {
+public class CryptogramModel {
 
 	private String answer;
-	private HashMap<String, String> userMap;
-	private HashMap<String, String> encryptMap;
+	private ArrayMap<String, String> userMap;
+	private ArrayMap<String, String> encryptMap;
 	private String encryptStr;
 	private String decryptStr;
 	private String encryptFreq;
 	
-	/**
-	 * Default constructor.
-	 */
+	
 	public CryptogramModel() {
 		this.answer     = chooseQuote();
-		this.userMap    = new HashMap<String, String>();
+		this.userMap    = new ArrayMap<>();
 		this.encryptMap = createEncryptMap();
 		this.encryptStr = makeEncryptStr();
 		this.decryptStr = makeDecryptStr();
 		this.encryptFreq = createFreq();
 	}
+	
+	/**
+	 * The overloaded constructor is for CryptogramTest file
+	 * to pass in a quote with a known answer. 
+	 * 
+	 * @param test is a passed in quote.
+	 */
+	public CryptogramModel(String test) {
+		this.answer     = test;
+		this.userMap    = new ArrayMap<>();
+		this.encryptMap = createEncryptMap();
+		this.encryptStr = makeEncryptStr();
+		this.decryptStr = makeDecryptStr();
+		this.encryptFreq = createFreq();
+	}
+	
 	
 	/**
 	 * The following func. checks that the params are alphabetic. 
@@ -60,8 +72,6 @@ public class CryptogramModel extends Observable {
 			this.userMap.put((encryptedChar+"").toUpperCase(), (replacementChar+"").toUpperCase());
 		}
 		decryptStr = makeDecryptStr();
-		setChanged();
-		notifyObservers();
 	}
 	
 	
@@ -158,7 +168,7 @@ public class CryptogramModel extends Observable {
 	 * @return encryptMap is a HashMap that maps the alphabet to a shuffled alphabet (encryption).
 	 * 					  
 	 */
-	private HashMap<String, String> createEncryptMap() {
+	private ArrayMap<String, String> createEncryptMap() {
 		//make alphabet list
 		List<String> alphabet = getAlphabet();
 		
@@ -167,7 +177,7 @@ public class CryptogramModel extends Observable {
 		Collections.shuffle(shuffAlpha);
 		
 		//create encryption map (alpha --> shuffled alpha)
-		HashMap<String, String> encryptMap =  new HashMap<>();
+		ArrayMap<String, String> encryptMap =  new ArrayMap<>();
 		
 		//create encryption map (alpha --> shuffled alpha)
 		for(int i = 0; i < alphabet.size(); i++) {
@@ -235,35 +245,26 @@ public class CryptogramModel extends Observable {
 	}
 	
 	/**
-	 * The following function returns a correct key mapping of the encryption map.
+	 * The following function returns a key mapping from the encryption map.
 	 * 
-	 * It loops through the answer, encryptMap and userMap to return a mapping
-	 * that is either not in the userMap or is mapped incorrectly.
+	 * It loops through the encryptMap and userMap to return a mapping
+	 * that has is either not in the userMap or is mapped incorrectly.
 	 * 
-	 * @return hint[] is a string array of a correct mapping.
+	 * @return  is a string that represents a correct mapping from the encryption map.
 	 */
-	public String[] getMapping() {
-		String[] answer = this.answer.split("");
-		String hint[] = new String[2];
-		for(int i = 0; i < answer.length; i++) {
-			String letter = answer[i];
-			if(Character.isLetter(letter.charAt(0))){
-				String ans = encryptMap.get(letter);
-				if(userMap.containsKey(ans)) {
-					String guess = userMap.get(ans);
-					if(!guess.equals(letter)) {
-						hint[0] = ans;
-						hint[1] = letter;
-						break;
-					}
-				} else {
-					hint[0] = ans;
-					hint[1] = letter;
-					break;
+	public String getMapping() {
+		for(String letter: encryptMap.keySet()) {
+			String ans = encryptMap.get(letter);
+			if(userMap.containsKey(ans)) {
+				String guess = userMap.get(ans);
+				if(!guess.equals(letter)) {
+					return ("Hint: "+ ans + " = " + letter);
 				}
+			} else {
+				return ("Hint: " + ans + " = " + letter);
 			}
 		}
-		return hint;
+		return "";
 	}
 	
 	/**
@@ -280,7 +281,7 @@ public class CryptogramModel extends Observable {
 		//count occurrences
 		List<String> alphabet = getAlphabet();
 		String quote = this.encryptStr;
-		HashMap<String, Integer> freq =  new HashMap<>();
+		ArrayMap<String, Integer> freq =  new ArrayMap<>();
 		for(char c: quote.toCharArray()) {
 			String letter = (c +"");
 			if(freq.containsKey(letter)) {

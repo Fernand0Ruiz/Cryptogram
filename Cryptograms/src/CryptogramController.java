@@ -1,9 +1,8 @@
-
 import java.util.List;
 
 /**
 * AUTHOR: Fernando Ruiz
-* FILE: CryptogramController.java
+* FILE: CryptogramController.java 
 * PURPOSE: The following class constructs a CryptogramModel object, that represents
 * 		   the Cryptogram game. This class provides functions for accessing and modifying
 * 		   the game by calling CryptogramModel methods to control the game. This is for purpose
@@ -18,21 +17,18 @@ public class CryptogramController {
 	
 	private CryptogramModel cryptogram;
 	
-	/**
-	 * Default constructor.
-	 */
 	public CryptogramController() {
 		this.cryptogram = new CryptogramModel();
 	}
 	
 	/**
-	 * The overloaded constructor is for CryptogramGUIView
-	 * to control it's passed in instance of a CryptogramModel. 
+	 * The overloaded constructor is for CryptogramTest file
+	 * to pass in a quote with a known answer. 
 	 * 
-	 * @param model is a CryptogramModel
+	 * @param test is a passed in quote.
 	 */
-	public CryptogramController(CryptogramModel model) {
-		this.cryptogram = model;
+	public CryptogramController(String test) {
+		this.cryptogram = new CryptogramModel(test);
 	}
 	
     /**
@@ -93,7 +89,7 @@ public class CryptogramController {
      * @see CryptogramModel
      */
 	public String getEncryptedQuote() {
-		return wordWrap(cryptogram.getEncryptedString(), "N/A",80);
+		return wordWrap(cryptogram.getEncryptedString(), "N/A");
 	}
 	
 
@@ -109,7 +105,7 @@ public class CryptogramController {
      * @see CryptogramModel
      */
 	public String getUsersProgress() {
-		return wordWrap(cryptogram.getDecryptedString(), "replace",80);
+		return wordWrap(cryptogram.getDecryptedString(), "replace");
 	}
 	
 	
@@ -125,7 +121,7 @@ public class CryptogramController {
      * 
      * @return is a String that has been wrapped if >= to 80.
      */
-	private String wordWrap(String cryption, String command, int wrap) {
+	private String wordWrap(String cryption, String command) {
 		String cryptStr = cryption;
 		int lineSize = 0;
 		String str = "";
@@ -133,7 +129,7 @@ public class CryptogramController {
 		for(int i = 0; i < cryptArr.length; i++) {
 			String word = cryptArr[i];
 			int size = word.length()+1;
-			if((lineSize+size)>=wrap) {
+			if((lineSize+size)>=80) {
 				str += "split";
 				lineSize = 0;
 				str += word+" ";
@@ -153,10 +149,10 @@ public class CryptogramController {
      * The following method returns a hint/mapping from the encryptMap
      * in CryptogramModel. 
      * 
-     * @return is a String array that represents a mapping from the encryption key.
+     * @return is a String that represents a mapping from the encryption key.
      * @see CryptogramModel
      */
-	public String[] getHint(){
+	public String getHint(){
 		return cryptogram.getMapping();
 	}
 	
@@ -243,34 +239,4 @@ public class CryptogramController {
 		str += ("|---------------------------------------------------------------------------|");
 		return str;
 	}
-	
-	
-    /**
-     * Returns 2D array to the CryptogramGUIView, based on a string command. 
-     * 
-     * The following method takes in a passed in string command and returns
-     * the desired string split in lines of 30 char or less in a 2D array. 
-     * This for the CryptogramGUIView to display strings based on the spec format.
-     * 
-     * @return guiArr is a 2D string array of a particular string from the model.
-     */
-	public String[][] guiStr(String command) {
-		String str = null;
-		if(command.equals("encrypt")) {
-			str = wordWrap(cryptogram.getEncryptedString(), "N/A",30);
-		} else if(command.equals("decrypt")) {
-			str = wordWrap(cryptogram.getDecryptedString(), "N/A",30);
-		}else if(command.equals("answer")) {
-			str = wordWrap(cryptogram.getAnswer(), "N/A",30);
-		}
-		
-        String[] arr = str.split("split");
-        String[][] guiArr = new String[arr.length][1];
-        for(int i = 0; i < arr.length;i++) {
-        	guiArr[i][0] = arr[i];
-        }
-
-		return guiArr;
-	}
-	
 }

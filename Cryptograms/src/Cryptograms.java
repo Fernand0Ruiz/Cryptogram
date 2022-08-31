@@ -1,10 +1,7 @@
 import java.util.Scanner;
-
-import javafx.application.Application;
-import javafx.stage.Stage;
 /** 
 * Author: Fernando Ruiz
-* FILE: CryptogramTextView.java
+* FILE: Cryptograms.java
 * PURPOSE: The following  program is a textual interface of the game Cryptograms. The user is given
 *          a random phrase/quote to decrypt from quote.txt. The user is prompted to enter two characters,
 *          one they want to replace, and its replacement. The characters are displayed above the encryption to 
@@ -18,7 +15,7 @@ import javafx.stage.Stage;
 * @see CryptogramController
 */
 
-public class CryptogramTextView  extends Application {
+public class Cryptograms {
 	
 	public static void main(String[] args) {
 		CryptogramController game = new CryptogramController();
@@ -46,8 +43,7 @@ public class CryptogramTextView  extends Application {
 			} else if(command.equals("freq")) {
 				System.out.println(game.getFreq());
 			} else if(command.equals("hint")) {
-				String[] hint = game.getHint();
-				System.out.println("Hint: "+ hint[0] + " = " + hint[1]);
+				System.out.println(game.getHint());
 			} else if (command.equals("exit")) {
 				System.out.println("Game Ended Early!");
 				break;
@@ -67,16 +63,5 @@ public class CryptogramTextView  extends Application {
 		}
 		
 		userInput.close();
-	}
-	
-	/**
-	 * The following function launches main in this class.
-	 * 
-	 * @param primaryStage is stage object.
-	 * @throws Exception
-	 */
-	@Override
-	public void start(Stage primaryStage) throws Exception {
-		main(null);
 	}
 }
