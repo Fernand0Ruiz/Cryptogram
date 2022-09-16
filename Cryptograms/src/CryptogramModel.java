@@ -1,6 +1,8 @@
 /**
 * AUTHOR: Fernando Ruiz
 * FILE: CryptogramModel.java
+* ASSIGNMENT: Programming Assignment 4 - Cryptograms
+* COURSE: CSc 335; Fall 2020;
 * PURPOSE: The following class represents the Cryptogram game, it uses the file quotes.txt
 * 		   to select a random quote for the user to decrypt (answer). It uses a HashMap
 * 		   of the Alphabet mapped to shuffled letters to decrypt the quote/answer (encryptMap).
@@ -19,9 +21,10 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Observable;
 import java.util.Scanner;
 
-public class CryptogramModel {
+public class CryptogramModel extends Observable {
 
 	private String answer;
 	private ArrayMap<String, String> userMap;
@@ -30,7 +33,9 @@ public class CryptogramModel {
 	private String decryptStr;
 	private String encryptFreq;
 	
-	
+	/**
+	 * Default constructor.
+	 */
 	public CryptogramModel() {
 		this.answer     = chooseQuote();
 		this.userMap    = new ArrayMap<>();
@@ -39,22 +44,6 @@ public class CryptogramModel {
 		this.decryptStr = makeDecryptStr();
 		this.encryptFreq = createFreq();
 	}
-	
-	/**
-	 * The overloaded constructor is for CryptogramTest file
-	 * to pass in a quote with a known answer. 
-	 * 
-	 * @param test is a passed in quote.
-	 */
-	public CryptogramModel(String test) {
-		this.answer     = test;
-		this.userMap    = new ArrayMap<>();
-		this.encryptMap = createEncryptMap();
-		this.encryptStr = makeEncryptStr();
-		this.decryptStr = makeDecryptStr();
-		this.encryptFreq = createFreq();
-	}
-	
 	
 	/**
 	 * The following func. checks that the params are alphabetic. 
@@ -72,6 +61,8 @@ public class CryptogramModel {
 			this.userMap.put((encryptedChar+"").toUpperCase(), (replacementChar+"").toUpperCase());
 		}
 		decryptStr = makeDecryptStr();
+		setChanged();
+		notifyObservers();
 	}
 	
 	
@@ -245,26 +236,35 @@ public class CryptogramModel {
 	}
 	
 	/**
-	 * The following function returns a key mapping from the encryption map.
+	 * The following function returns a correct key mapping of the encryption map.
 	 * 
-	 * It loops through the encryptMap and userMap to return a mapping
-	 * that has is either not in the userMap or is mapped incorrectly.
+	 * It loops through the answer, encryptMap and userMap to return a mapping
+	 * that is either not in the userMap or is mapped incorrectly.
 	 * 
-	 * @return  is a string that represents a correct mapping from the encryption map.
+	 * @return hint[] is a string array of a correct mapping.
 	 */
-	public String getMapping() {
-		for(String letter: encryptMap.keySet()) {
-			String ans = encryptMap.get(letter);
-			if(userMap.containsKey(ans)) {
-				String guess = userMap.get(ans);
-				if(!guess.equals(letter)) {
-					return ("Hint: "+ ans + " = " + letter);
+	public String[] getMapping() {
+		String[] answer = this.answer.split("");
+		String hint[] = new String[2];
+		for(int i = 0; i < answer.length; i++) {
+			String letter = answer[i];
+			if(Character.isLetter(letter.charAt(0))){
+				String ans = encryptMap.get(letter);
+				if(userMap.containsKey(ans)) {
+					String guess = userMap.get(ans);
+					if(!guess.equals(letter)) {
+						hint[0] = ans;
+						hint[1] = letter;
+						break;
+					}
+				} else {
+					hint[0] = ans;
+					hint[1] = letter;
+					break;
 				}
-			} else {
-				return ("Hint: " + ans + " = " + letter);
 			}
 		}
-		return "";
+		return hint;
 	}
 	
 	/**
