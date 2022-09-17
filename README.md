@@ -3,7 +3,7 @@
 ## Table of contents
 * [General info](#general-info)
 * [Technologies](#technologies)
-* [Setup](#setup)
+* [Run Config](#run-config)
 
 ## General info
 This project is a programming-quote-themed Cryptogram puzzle interface that 
@@ -18,8 +18,9 @@ Project is created with:
 * JUnit version: 5.6.0
 	
 ## Run Config
-Pass the following args to run textual interface or graphical interface.
+Pass one of the two arguments to display the graphical interface (default) or 
+textual interface.
 
-```
-$ -window
-$ -text
+-window
+
+-text
