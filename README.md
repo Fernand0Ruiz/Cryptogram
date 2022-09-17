@@ -18,7 +18,7 @@ Project is created with:
 * JUnit version: 5.6.0
 	
 ## Run Config
-Launch File: Tamaclonechi.java 
+Launch File: Cryptogram.java 
 
 Pass one of the two arguments to display the graphical interface (default) or textual interface.
 
