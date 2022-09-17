@@ -13,7 +13,7 @@ to generate encrypted quotes to be strategically decoded by the user.
 ## Technologies
 Project is created with:
 * Eclipse IDE 2019-12 (http://www.eclipse.org/downloads/)
-* Java version: 8 (https://adoptopenjdk.net/)
+* Java version: JDK 8 (https://adoptopenjdk.net/)
 * JRE version: 1.8.0
 * JUnit version: 5.6.0
 	
