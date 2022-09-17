@@ -17,10 +17,9 @@ Project is created with:
 * JRE version: 1.8.0
 * JUnit version: 5.6.0
 	
-## Setup
-To run this project, install it locally using npm:
+## Run Config
+Pass the following args to run textual interface or graphical interface.
 
 ```
-$ cd ../lorem
-$ npm install
-$ npm start
+$ -window
+$ -text
